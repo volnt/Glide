@@ -1,17 +1,7 @@
-var game = new Phaser.Game(500, 500, Phaser.AUTO, 'game_div');
+var game = new Phaser.Game(1000, 500, Phaser.AUTO, 'game_div');
 
-var main_state = {
+game.state.add('load', load_state);
+game.state.add('menu', menu_state);
+game.state.add('play', play_state);
 
-    preload: function() {
-	this.game.stage.backgroundColor = '#0C0C0C';
-    },
-
-    create: function() {
-    },
-
-    update: function() {
-    },
-}
-
-game.state.add('main', main_state);
-game.state.start('main');
+game.state.start('load');
