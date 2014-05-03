@@ -11,8 +11,15 @@ var load_state = {
 	this.game.load.image('loading', 'assets/full_loading.png');
 	this.game.load.image('flag', 'assets/flag.png');
 	this.game.load.spritesheet('character', 'assets/character.png', 5, 5);
+	this.game.load.image('top_stalactite', 'assets/top_stalactite.png');
+	this.game.load.image('bot_stalactite', 'assets/bot_stalactite.png');
 
 	this.game.load.tilemap('level1', 'level/1.json', null, Phaser.Tilemap.TILED_JSON);
+	this.game.load.tilemap('level2', 'level/2.json', null, Phaser.Tilemap.TILED_JSON);
+	this.game.load.tilemap('level3', 'level/3.json', null, Phaser.Tilemap.TILED_JSON);
+	this.game.load.tilemap('level4', 'level/4.json', null, Phaser.Tilemap.TILED_JSON);
+	this.game.load.tilemap('level5', 'level/5.json', null, Phaser.Tilemap.TILED_JSON);
+	this.game.load.tilemap('level6', 'level/6.json', null, Phaser.Tilemap.TILED_JSON);
 	this.game.load.image('map_tiles', 'assets/tilemap.png');
 
     },

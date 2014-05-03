@@ -1,12 +1,12 @@
-var menu_state = {
+var end_state = {
 
     preload: function() {
-	game.stage.backgroundColor = '#f0f0f0';
+	this.game.stage.backgroundColor = '#f0f0f0';
     },
 
     create: function() {
 	this.infos = this.game.add.text(this.game.world.centerX, this.game.world.centerY, 
-					"GLIDE\nUP to Start\nDOWN to Continue", {
+					"Game Over\nWell played :)\n(UP to Continue)", {
 					    font: '60px Arial',
 					    fill: '#87E8D1',
 					    align: 'center',
@@ -15,19 +15,17 @@ var menu_state = {
 	
 	game.input.keyboard.addKey(Phaser.Keyboard.UP).onDown.add(function() {
 	    this.level = 1;
-	    this.game.state.start("play");
-	}, this);
-	game.input.keyboard.addKey(Phaser.Keyboard.DOWN).onDown.add(function() {
-	    this.game.state.start("play");
+	    this.game.state.start("menu");
 	}, this);
     },
 
     update: function() {
-	
 	var p1 = game.input.pointer1;
 	var p2 = game.input.pointer2;
-	
-	if (p1.isDown || p2.isDown)
-	    this.game.state.start("play");
+
+	if (p1.isDown || p2.isDown) {
+	    this.level = 1;
+	    this.game.state.start("menu");
+	}
     },
 };
