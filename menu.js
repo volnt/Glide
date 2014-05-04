@@ -4,30 +4,32 @@ var menu_state = {
 	game.stage.backgroundColor = '#f0f0f0';
     },
 
-    create: function() {
-	this.infos = this.game.add.text(this.game.world.centerX, this.game.world.centerY, 
-					"GLIDE\nUP to Start\nDOWN to Continue", {
-					    font: '60px Arial',
-					    fill: '#87E8D1',
-					    align: 'center',
-					});
-	this.infos.anchor.setTo(0.5, 0.5);
-	
-	game.input.keyboard.addKey(Phaser.Keyboard.UP).onDown.add(function() {
-	    this.level = 1;
-	    this.game.state.start("play");
-	}, this);
-	game.input.keyboard.addKey(Phaser.Keyboard.DOWN).onDown.add(function() {
-	    this.game.state.start("play");
-	}, this);
+    restart: function() {
+	this.level = 1;
+	this.game.state.start("play");
+    },
+    
+    continue_game: function() {
+	this.game.state.start("play");	
     },
 
-    update: function() {
+    create: function() {
+	this.background = this.game.add.image(0, 0, 'background');
+	this.run_button = this.game.add.button(500, 0, 'run_button');
+	this.run_button.fixedToCamera = true;
+	this.jump_button = this.game.add.button(0, 0, 'jump_button');
+	this.jump_button.events.onInputOver.add(this.continue_game, this);
+	this.jump_button.events.onInputDown.add(this.continue_game, this);
+	this.jump_button.fixedToCamera = true;
+	this.crouch_button = this.game.add.button(0, 250, 'crouch_button');
+	this.crouch_button.events.onInputOver.add(this.restart, this);
+	this.crouch_button.events.onInputDown.add(this.restart, this);
+	this.crouch_button.fixedToCamera = true;
 	
-	var p1 = game.input.pointer1;
-	var p2 = game.input.pointer2;
-	
-	if (p1.isDown || p2.isDown)
-	    this.game.state.start("play");
+	game.input.keyboard.addKey(Phaser.Keyboard.UP).onDown.add(this.restart, this);
+	game.input.keyboard.addKey(Phaser.Keyboard.DOWN).onDown.add(this.continue_game, this);
+    },
+
+    update: function() {	
     },
 };

@@ -15,8 +15,86 @@ var play_state = {
 	this.character.animations.add('stand', [10, 11, 12, 13, 14], 15, false);
 	this.character.animations.play('walk');
 	this.character.scale.setTo(10);
-
+		
 	this.load_level(1);
+
+	this.run_button = this.game.add.button(500, 0, 'run_button', null, this, 1, 1, 1, 1);
+	this.run_button.fixedToCamera = true;
+	this.run_button.events.onInputOver.add(function(){this.run=true;}, this);
+	this.run_button.events.onInputOut.add(function(){this.run=false;}, this);
+	this.run_button.events.onInputDown.add(function(){this.run=true;}, this);
+	this.run_button.events.onInputUp.add(function(){this.run=false;}, this);
+	this.jump_button = this.game.add.button(0, 0, 'jump_button', null, this, 1, 1, 1, 1);
+	this.jump_button.events.onInputOver.add(function(){this.jump=true;}, this);
+	this.jump_button.events.onInputOut.add(function(){this.jump=false;}, this);
+	this.jump_button.events.onInputDown.add(function(){this.jump=true;}, this);
+	this.jump_button.events.onInputUp.add(function(){this.jump=false;}, this);
+	this.jump_button.fixedToCamera = true;
+	this.crouch_button = this.game.add.button(0, 250, 'crouch_button', null, this, 1, 1, 1, 1);
+	this.crouch_button.events.onInputOver.add(function(){this.crouch=true;}, this);
+	this.crouch_button.events.onInputOut.add(function(){this.crouch=false;}, this);
+	this.crouch_button.events.onInputDown.add(function(){this.crouch=true;}, this);
+	this.crouch_button.events.onInputUp.add(function(){this.crouch=false;}, this);
+	this.crouch_button.fixedToCamera = true;
+    },
+
+    update: function() { 
+	// jump, crouch, run
+	// if (this.game.input.keyboard.isDown(Phaser.Keyboard.UP)) { this.jump = true; }
+	// if (this.game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) { this.crouch = true; }
+	// if (this.game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) { this.run = true; }
+
+	this.game.physics.arcade.collide(this.character, this.layer);
+	this.game.physics.arcade.overlap(this.character, this.flag, 
+					 function () {
+					     this.load_level(this.level + 1);
+					 }, null, this);
+	this.game.physics.arcade.collide(this.character, this.top_stalactites, 
+					 function() {
+					     // this.die();
+					     }, null, this);
+	this.game.physics.arcade.overlap(this.character, this.bot_stalactites,
+					function() {
+					    if (this.crouched) return ;
+					    this.die();
+					}, null, this);
+
+	if (this.jump && this.character.body.onFloor()) {
+	    this.character.body.velocity.y = -500;
+	}
+	if (this.crouch) {
+	    if (!this.crouched)
+		this.character.animations.play('crouch');
+	    this.crouched = true;
+	} else {
+	    this.character.animations.play('walk');
+	    this.crouched = false;
+	}
+
+	if (this.run && !this.crouched) {
+	    if (this.character.body.onFloor() && this.character.body.velocity.x > 300)
+		this.character.body.velocity.x -= 2;
+	    else if (this.character.body.onFloor())
+		this.character.body.velocity.x = 300;
+	    else if (this.character.body.velocity.x < 450)
+		this.character.body.velocity.x += 5;
+	} else if (this.character.body.onFloor() && !this.crouched) {
+	    this.character.body.velocity.x *= 0.9;
+	}
+
+	if (this.crouched && this.character.body.onFloor()) {
+	    this.character.body.velocity.x *= 0.99;
+	}
+
+
+	if (this.character.body.x < 0 || this.character.body.x >= this.game.world.width - 50 || 
+	    this.character.body.y < 0 || this.character.body.y >= this.game.world.height - 50) {
+	    this.die();
+	    }
+
+	// this.jump = false;
+	// this.crouch = false;
+	// this.run = false;
     },
 
     load_level: function(level) {
@@ -90,57 +168,6 @@ var play_state = {
 	this.level = level;
     },
 
-    update: function() { 
-	this.game.physics.arcade.collide(this.character, this.layer);
-	this.game.physics.arcade.overlap(this.character, this.flag, 
-					 function () {
-					     this.load_level(this.level + 1);
-					 }, null, this);
-	this.game.physics.arcade.collide(this.character, this.top_stalactites, 
-					 function() {
-					     // this.die();
-					     }, null, this);
-	this.game.physics.arcade.overlap(this.character, this.bot_stalactites,
-					function() {
-					    if (this.crouched) return ;
-					    this.die();
-					}, null, this);
-
-	if (this.game.input.keyboard.isDown(Phaser.Keyboard.UP) && this.character.body.onFloor()) {
-	    this.character.body.velocity.y = -500;
-	}
-	if (this.game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) {
-	    if (!this.crouched)
-		this.character.animations.play('crouch');
-	    this.crouched = true;
-	} else {
-	    this.character.animations.play('walk');
-	    this.crouched = false;
-	}
-
-	if (this.game.input.keyboard.isDown(Phaser.Keyboard.RIGHT) && 
-	    // this.character.body.onFloor() &&
-	    !this.crouched) {
-	    if (this.character.body.onFloor() && this.character.body.velocity.x > 300)
-		this.character.body.velocity.x -= 2;
-	    else if (this.character.body.onFloor())
-		this.character.body.velocity.x = 300;
-	    else if (this.character.body.velocity.x < 450)
-		this.character.body.velocity.x += 5;
-	} else if (this.character.body.onFloor() && !this.crouched) {
-	    this.character.body.velocity.x *= 0.9;
-	}
-
-	if (this.crouched && this.character.body.onFloor()) {
-	    this.character.body.velocity.x *= 0.99;
-	}
-
-
-	if (this.character.body.x < 0 || this.character.body.x >= this.game.world.width - 50 || 
-	    this.character.body.y < 0 || this.character.body.y >= this.game.world.height - 50) {
-	    this.die();
-	    }
-    },
     die : function() {
 	this.character.anchor.setTo(0.5, 0.5);
 	var t = this.game.add.tween(this.character).to({angle:360}, 300).start();

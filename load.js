@@ -13,6 +13,10 @@ var load_state = {
 	this.game.load.spritesheet('character', 'assets/character.png', 5, 5);
 	this.game.load.image('top_stalactite', 'assets/top_stalactite.png');
 	this.game.load.image('bot_stalactite', 'assets/bot_stalactite.png');
+	this.game.load.image('background', 'assets/background.png');
+	this.game.load.spritesheet('jump_button', 'assets/jump_button.png', 500, 250);
+	this.game.load.spritesheet('crouch_button', 'assets/crouch_button.png', 500, 250);
+	this.game.load.spritesheet('run_button', 'assets/run_button.png', 500, 500);
 
 	this.game.load.tilemap('level1', 'level/1.json', null, Phaser.Tilemap.TILED_JSON);
 	this.game.load.tilemap('level2', 'level/2.json', null, Phaser.Tilemap.TILED_JSON);
