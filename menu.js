@@ -1,7 +1,7 @@
 var menu_state = {
 
     preload: function() {
-	game.stage.backgroundColor = '#f0f0f0';
+	game.stage.setBackgroundColor(0xffffff);
     },
 
     restart: function() {
@@ -18,11 +18,11 @@ var menu_state = {
 	this.run_button = this.game.add.button(500, 0, 'run_button');
 	this.run_button.fixedToCamera = true;
 	this.jump_button = this.game.add.button(0, 0, 'jump_button');
-	this.jump_button.events.onInputOver.add(this.continue_game, this);
+	// this.jump_button.events.onInputOver.add(this.continue_game, this);
 	this.jump_button.events.onInputDown.add(this.continue_game, this);
 	this.jump_button.fixedToCamera = true;
 	this.crouch_button = this.game.add.button(0, 250, 'crouch_button');
-	this.crouch_button.events.onInputOver.add(this.restart, this);
+	// this.crouch_button.events.onInputOver.add(this.restart, this);
 	this.crouch_button.events.onInputDown.add(this.restart, this);
 	this.crouch_button.fixedToCamera = true;
 	

@@ -1,6 +1,6 @@
 var load_state = {
     preload: function() {
-	this.game.stage.backgroundColor = '#fff';
+	game.stage.setBackgroundColor(0xffffff);
 
 	text = this.game.add.text(250, 250, "loading..", {
 	    font: '30px Arial',
@@ -10,7 +10,7 @@ var load_state = {
 	this.game.load.image('scene', 'assets/big_loading.png');
 	this.game.load.image('loading', 'assets/full_loading.png');
 	this.game.load.image('flag', 'assets/flag.png');
-	this.game.load.spritesheet('character', 'assets/character.png', 5, 5);
+	this.game.load.spritesheet('character', 'assets/character.png', 50, 50);
 	this.game.load.image('top_stalactite', 'assets/top_stalactite.png');
 	this.game.load.image('bot_stalactite', 'assets/bot_stalactite.png');
 	this.game.load.image('background', 'assets/background.png');

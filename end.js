@@ -1,7 +1,7 @@
 var end_state = {
 
     preload: function() {
-	this.game.stage.backgroundColor = '#f0f0f0';
+	game.stage.setBackgroundColor(0xffffff);
     },
 
     create: function() {

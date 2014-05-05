@@ -1,6 +1,6 @@
 var play_state = {
     preload: function() {
-	game.stage.backgroundColor = '#f0f0f0';
+	game.stage.setBackgroundColor(0xffffff);
     },
 
     create: function() {
@@ -8,42 +8,45 @@ var play_state = {
 	this.game.physics.arcade.gravity.y = 100;
 	this.game.stage.smoothed = false;
 
-
 	this.character = this.game.add.sprite(0, 0, 'character');
 	this.character.animations.add('walk', [0, 1, 2, 3, 4], 15, true);
 	this.character.animations.add('crouch', [5, 6, 7, 8, 9], 30, false);
 	this.character.animations.add('stand', [10, 11, 12, 13, 14], 15, false);
 	this.character.animations.play('walk');
-	this.character.scale.setTo(10);
 		
 	this.load_level(1);
 
+	this.right = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+	this.down = this.game.input.keyboard.addKey(Phaser.Keyboard.DOWN);
+	this.up = this.game.input.keyboard.addKey(Phaser.Keyboard.UP);
+	this.right.onDown.add(function() {this.run=true;}, this);
+	this.right.onUp.add(function() {this.run=false;}, this);
+	this.down.onDown.add(function() {this.crouch=true;}, this);
+	this.down.onUp.add(function() {this.crouch=false;}, this);
+	this.up.onDown.add(function() {this.jump=true;}, this);
+	this.up.onUp.add(function() {this.jump=false;}, this);
+	
 	this.run_button = this.game.add.button(500, 0, 'run_button', null, this, 1, 1, 1, 1);
 	this.run_button.fixedToCamera = true;
-	this.run_button.events.onInputOver.add(function(){this.run=true;}, this);
-	this.run_button.events.onInputOut.add(function(){this.run=false;}, this);
+	// this.run_button.events.onInputOver.add(function(){this.run=true;}, this);
+	// this.run_button.events.onInputOut.add(function(){this.run=false;}, this);
 	this.run_button.events.onInputDown.add(function(){this.run=true;}, this);
 	this.run_button.events.onInputUp.add(function(){this.run=false;}, this);
 	this.jump_button = this.game.add.button(0, 0, 'jump_button', null, this, 1, 1, 1, 1);
-	this.jump_button.events.onInputOver.add(function(){this.jump=true;}, this);
-	this.jump_button.events.onInputOut.add(function(){this.jump=false;}, this);
+	// this.jump_button.events.onInputOver.add(function(){this.jump=true;}, this);
+	// this.jump_button.events.onInputOut.add(function(){this.jump=false;}, this);
 	this.jump_button.events.onInputDown.add(function(){this.jump=true;}, this);
 	this.jump_button.events.onInputUp.add(function(){this.jump=false;}, this);
 	this.jump_button.fixedToCamera = true;
 	this.crouch_button = this.game.add.button(0, 250, 'crouch_button', null, this, 1, 1, 1, 1);
-	this.crouch_button.events.onInputOver.add(function(){this.crouch=true;}, this);
-	this.crouch_button.events.onInputOut.add(function(){this.crouch=false;}, this);
+	// this.crouch_button.events.onInputOver.add(function(){this.crouch=true;}, this);
+	// this.crouch_button.events.onInputOut.add(function(){this.crouch=false;}, this);
 	this.crouch_button.events.onInputDown.add(function(){this.crouch=true;}, this);
 	this.crouch_button.events.onInputUp.add(function(){this.crouch=false;}, this);
 	this.crouch_button.fixedToCamera = true;
     },
 
     update: function() { 
-	// jump, crouch, run
-	// if (this.game.input.keyboard.isDown(Phaser.Keyboard.UP)) { this.jump = true; }
-	// if (this.game.input.keyboard.isDown(Phaser.Keyboard.DOWN)) { this.crouch = true; }
-	// if (this.game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)) { this.run = true; }
-
 	this.game.physics.arcade.collide(this.character, this.layer);
 	this.game.physics.arcade.overlap(this.character, this.flag, 
 					 function () {
@@ -103,7 +106,11 @@ var play_state = {
 	if (this.top_stalactites) this.top_stalactites.destroy();
 	if (this.bot_stalactites) this.bot_stalactites.destroy();
 	if (this.infos) this.infos.destroy();
-	if (level >= 7) this.game.state.start("end");
+
+	if (level == 7) {
+	    this.game.state.start("end");
+	    return ;
+	}
 
 	if (level == 1)
 	    text = "RIGHT to run";
