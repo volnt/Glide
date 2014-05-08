@@ -103,7 +103,7 @@ var play_state = {
 	if (this.top_stalactites) this.top_stalactites.destroy();
 	if (this.bot_stalactites) this.bot_stalactites.destroy();
 	if (this.infos) this.infos.destroy();
-	if (level >= 7) this.game.state.start("end");
+	if (level >= 7) { this.game.state.start("end"); return; }
 
 	if (level == 1)
 	    text = "RIGHT to run";
